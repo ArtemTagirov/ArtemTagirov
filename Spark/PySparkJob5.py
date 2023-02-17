@@ -1,0 +1,72 @@
+import argparse
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+
+
+def process(spark, flights_path, airlines_path, result_path):
+    """
+    Основной процесс задачи.
+
+    :param spark: SparkSession
+    :param flights_path: путь до датасета c рейсами
+    :param airlines_path: путь до датасета c авиалиниями
+    :param result_path: путь с результатами преобразований
+    """
+   
+    flight_df = spark.read.parquet(flights_path)
+    airlines_df = spark.read.parquet(airlines_path)
+
+    airlines_df = airlines_df \
+        .withColumnRenamed('AIRLINE', 'AIRLINE_A')
+
+    result_df = flight_df \
+        .join(other=airlines_df, on=airlines_df['IATA_CODE'] == F.col('AIRLINE'), how='inner') \
+        .select(airlines_df['AIRLINE_A'].alias('AIRLINE_NAME'),
+                F.when(flight_df['CANCELLED'] == 0, 1).otherwise(0).alias('correct'),
+                F.col('DIVERTED'),
+                F.col('CANCELLED'),
+                F.col('DISTANCE'),
+                F.col('AIR_TIME'),
+                F.when(flight_df['CANCELLATION_REASON'] == 'A', 1).otherwise(0).alias('airline_issue'),
+                F.when(flight_df['CANCELLATION_REASON'] == 'B', 1).otherwise(0).alias('weather_issue'),
+                F.when(flight_df['CANCELLATION_REASON'] == 'C', 1).otherwise(0).alias('nas_issue'),
+                F.when(flight_df['CANCELLATION_REASON'] == 'D', 1).otherwise(0).alias('security_issue')) \
+        .groupBy(F.col('AIRLINE_NAME')) \
+        .agg(F.sum(F.col('correct')).alias('correct_count'),
+             F.sum(F.col('DIVERTED')).alias('diverted_count'),
+             F.sum(F.col('CANCELLED')).alias('cancelled_count'),
+             F.avg(F.col('DISTANCE')).alias('avg_distance'),
+             F.avg(F.col('AIR_TIME')).alias('avg_air_time'),
+             F.sum(F.col('airline_issue')).alias('airline_issue_count'),
+             F.sum(F.col('weather_issue')).alias('weather_issue_count'),
+             F.sum(F.col('nas_issue')).alias('nas_issue_count'),
+             F.sum(F.col('security_issue')).alias('security_issue_count'))
+
+    #result_df.show(n=30)
+    result_df.write.mode('overwrite').parquet(result_path)
+
+
+def main(flights_path, airlines_path, result_path):
+    spark = _spark_session()
+    process(spark, flights_path, airlines_path, result_path)
+
+
+def _spark_session():
+    """
+    Создание SparkSession.
+
+    :return: SparkSession
+    """
+    return SparkSession.builder.appName('PySparkJob5').getOrCreate()
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--flights_path', type=str, default='flights.parquet', help='Please set flights datasets path.')
+    parser.add_argument('--airlines_path', type=str, default='airlines.parquet', help='Please set airlines datasets path.')
+    parser.add_argument('--result_path', type=str, default='result', help='Please set result path.')
+    args = parser.parse_args()
+    flights_path = args.flights_path
+    airlines_path = args.airlines_path
+    result_path = args.result_path
+    main(flights_path, airlines_path, result_path)
