@@ -1,16 +1,17 @@
-### Hi there 👋
+# My DE portfolio
 
-<!--
-**ArtemTagirov/ArtemTagirov** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Здесь я собрал свои работы в виде портфолио.
 
-Here are some ideas to get you started:
+-----
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+# ✅ Airflow, создание DAG и Operator
+Задача:
+- С помощью API (https://rickandmortyapi.com/documentation/#location) создать Operator для нахождения трех локации сериала
+"Рик и Морти" с наибольшим количеством резидентов. 
+- Создать DAG, который создает в  GreenPlum'е таблицу с названием "<название>" с полями id, name, type, dimension, resident_cnt и записывает значения соответствующих полей этих трёх локаций в таблицу.
+
+Результат: [Operator](https://github.com/ArtemTagirov/ArtemTagirov/blob/main/Airflow/plugins/atg_ram_top_n_locations_operator.py), [DAG](https://github.com/ArtemTagirov/ArtemTagirov/blob/main/Airflow/dags/atg_ram_top_locations.py)
+
+# ✅ 
+## ✅  
+### ✅ 

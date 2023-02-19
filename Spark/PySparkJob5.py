@@ -12,7 +12,7 @@ def process(spark, flights_path, airlines_path, result_path):
     :param airlines_path: путь до датасета c авиалиниями
     :param result_path: путь с результатами преобразований
     """
-   
+
     flight_df = spark.read.parquet(flights_path)
     airlines_df = spark.read.parquet(airlines_path)
 
