@@ -26,6 +26,27 @@ __Примечание:__ Датасет [NYC Yellow Taxi](https://www.nyc.gov/s
 
 __Результат:__ [MapReduce приложение](https://github.com/ArtemTagirov/ArtemTagirov/tree/main/MapReduce)
 
+# ✅ Hive, создание скриптов
+__Задача:__
+- Создать скрипты для создания таблиц-справочников согласно [описанию](https://www.nyc.gov/assets/tlc/downloads/pdf/data_dictionary_trip_records_yellow.pdf) формата данных.
+- Создать скрипт для создания фактовой таблицы, партиционирование по дню начала поездки.
+- Создать скрипт наливки данных в фактовую таблицу
+- Создать скрипт для создания представления (view)
+- Создать скрипт для создания витрины вида:
+
+Payment type |    Date    | Tips average amount | Passengers total |
+:------------|:----------:|:-------------------:|-----------------:|
+Cash | 2020-01-01 | 123.45| 67
+
+- Создать скрипт для наливки данных в витрину
+- Создать скрипт для запуска всего перечисленного выше в правильном порядке
+
+__Примечание:__ Датасет [NYC Yellow Taxi](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) за 2020 год был 
+предварительно скачан в созданный S3 бакет в Object Storage. Задача решалась в облачном кластере yandex.cloud
+
+__Результат:__ На готовые скрипты можно посмотреть в данной [папке](https://github.com/ArtemTagirov/ArtemTagirov/tree/main/Hive)
+
+
 # ✅ 
 ## ✅  
 ### ✅ 
