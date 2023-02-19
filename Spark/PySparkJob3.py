@@ -1,3 +1,9 @@
+"""
+Список аэропортов у которых самые больше проблемы с задержкой на вылет рейса. Дополнительно необходимо вычислить среднее,
+минимальное, максимальное время задержки и выбрать аэропорты только те где максимальная задержка 1000 секунд и больше.
+Дополнительно посчитать корреляцию между временем задержки и днем недели.
+"""
+
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -26,9 +32,9 @@ def process(spark, flights_path, result_path):
                 F.col('corr_delay2day_of_week')) \
         .filter(F.col('max_delay') > 1000)
 
+    #result_df.write.mode('overwrite').parquet(result_path)
+    result_df.show()
 
-    #result_df.show(n=10)
-    result_df.write.mode('overwrite').parquet(result_path)
 
 
 def main(flights_path, result_path):

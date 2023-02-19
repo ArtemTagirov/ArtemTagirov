@@ -1,3 +1,7 @@
+"""
+Топ-10 авиамаршрутов (ORIGIN_AIRPORT, DESTINATION_AIRPORT) по наибольшему числу рейсов, а так же среднее время в полете (AIR_TIME).
+"""
+
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -21,8 +25,8 @@ def process(spark, flights_path, result_path):
         .orderBy(F.col('tail_count').desc()) \
         .limit(10)
 
-    #result_df.show()
-    result_df.write.mode('overwrite').parquet(result_path)
+    #result_df.write.mode('overwrite').parquet(result_path)
+    result_df.show()
 
 
 
@@ -37,7 +41,7 @@ def _spark_session():
 
     :return: SparkSession
     """
-    return SparkSession.builder.appName('PySparkJob1').getOrCreate()
+    return SparkSession.builder.appName('PySparkJob2').getOrCreate()
 
 
 if __name__ == "__main__":

@@ -1,3 +1,18 @@
+"""
+Витрина со статистикой по компаниям и возникающих проблемах вида:
+Колонка	Описание
+AIRLINE_NAME ----------- полное название авиакомпании
+correct_count ---------- число выполненных рейсов
+diverted_count --------- число рейсов выполненных с задержкой
+cancelled_count -------- число отмененных рейсов
+avg_distance ----------- средняя дистанция рейсов
+avg_air_time ----------- среднее время в небе
+airline_issue_count ---- число задержек из-за проблем с самолетом
+weather_issue_count ---- число задержек из-за погодных условий
+nas_issue_count -------- число задержек из-за проблем NAS
+security_issue_count --- число задержек из-за службы безопасности
+"""
+
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -42,8 +57,8 @@ def process(spark, flights_path, airlines_path, result_path):
              F.sum(F.col('nas_issue')).alias('nas_issue_count'),
              F.sum(F.col('security_issue')).alias('security_issue_count'))
 
-    #result_df.show(n=30)
-    result_df.write.mode('overwrite').parquet(result_path)
+    #result_df.write.mode('overwrite').parquet(result_path)
+    result_df.show()
 
 
 def main(flights_path, airlines_path, result_path):

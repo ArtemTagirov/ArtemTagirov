@@ -1,3 +1,7 @@
+"""
+Построить сводную таблицу отображающую Топ-10 рейсов по коду рейса (TAIL_NUMBER) и числу вылетов за все время.
+"""
+
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -18,8 +22,10 @@ def process(spark, flights_path, result_path):
         .groupBy(flights_df['TAIL_NUMBER']) \
         .agg(F.count(flights_df['YEAR']).alias('count')) \
         .orderBy(F.col('count').desc()) \
-        .limit(10).write.mode('overwrite').parquet(result_path)
+        .limit(10)
 
+    #results_df.write.mode('overwrite').parquet(result_path)
+    results_df.show()
 
 
 

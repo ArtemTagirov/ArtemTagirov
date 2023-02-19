@@ -1,3 +1,18 @@
+"""
+Для дашборда с отображением выполненных рейсов требуется собрать таблицу вида:
+Колонка -------------------- Описание
+AIRLINE_NAME --------------- Полное название авиакомпании
+TAIL_NUMBER ---------------- Номер рейса
+ORIGIN_COUNTRY ------------- Страна отправления
+ORIGIN_AIRPORT_NAME -------- Полное название аэропорта отправления
+ORIGIN_LATITUDE ------------ Широта аэропорта отправления
+ORIGIN_LONGITUDE ----------- Долгота аэропорта отправления
+DESTINATION_COUNTRY -------- Страна прибытия
+DESTINATION_AIRPORT_NAME --- Полное название аэропорта прибытия
+DESTINATION_LATITUDE ------- Широта аэропорта прибытия
+DESTINATION_LONGITUDE ------ Долгота аэропорта прибытия
+"""
+
 import argparse
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
@@ -31,12 +46,6 @@ def process(spark, flights_path, airlines_path, airports_path, result_path):
         .withColumnRenamed('LATITUDE', 'DESTINATION_LATITUDE') \
         .withColumnRenamed('LONGITUDE', 'DESTINATION_LONGITUDE')
 
-
-    # flight_df.show(n=10)
-    # airlines_df.show()
-    # airports_df.show()
-    # airports_df_destination.show()
-
     result_df = flight_df \
         .join(other=airlines_df, on=airlines_df['IATA_CODE_A'] == F.col('AIRLINE'), how='inner') \
         .join(other=airports_df, on=airports_df['IATA_CODE'] == F.col('ORIGIN_AIRPORT'), how='inner') \
@@ -52,8 +61,8 @@ def process(spark, flights_path, airlines_path, airports_path, result_path):
                 airports_df_destination['DESTINATION_LATITUDE'],
                 airports_df_destination['DESTINATION_LONGITUDE'])
 
-    #result_df.show(n=10)
-    result_df.write.mode('overwrite').parquet(result_path)
+    #result_df.write.mode('overwrite').parquet(result_path)
+    result_df.show()
 
 def main(flights_path, airlines_path, airports_path, result_path):
     spark = _spark_session()
